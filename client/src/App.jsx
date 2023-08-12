@@ -17,7 +17,7 @@ import Signup from './pages/Signup'
 
 function App() {
   const theme = createTheme({
-    palette : {mode: 'dark'}
+        palette: { mode: 'dark' }
   })
 
   return (

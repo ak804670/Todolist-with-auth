@@ -1,0 +1,10 @@
+.container{
+background-color: rgba(43, 42, 42, 0.178);
+backdrop-filter: "blur(20px)";
+box-shadow: 0 0 10px 10px rgba(30, 30, 30, 0.5);
+
+}
+
+.container h1{
+    text-align: center;
+}
