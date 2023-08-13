@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {Box} from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { useDispatch } from 'react-redux'
+import { setBoards } from '../redux/features/boardSlice'
+import { useNavigate } from 'react-router-dom'
+import boardApi from '../api/boardApi'
 
 const Home = () => {
+  const navigate= useNavigate()
+  const dispatch= useDispatch()
+  const [loading, setLoading]= useState(false)
 
-  const createBoard=()=>{
-    
+
+  const createBoard=async()=>{
+    setLoading(true)
+    try{
+      const res = await boardApi.create()
+        dispatch(setBoards([res]))
+        navigate(`/boards/${res.id}`)
+       
+    }catch(err){
+      alert(err)
+    }finally{
+      setLoading(false)
+    }
   }
 
 
@@ -23,11 +41,9 @@ const Home = () => {
         <LoadingButton
         variant='outlined'
         color='success'
-         
-        
-        sx={{
-          
-        }}
+         onClick={createBoard}
+         loading={loading}
+
         >
             click here to create your fist Board
         </LoadingButton>

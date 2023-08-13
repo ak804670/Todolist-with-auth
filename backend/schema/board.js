@@ -37,4 +37,4 @@ const  boardSchema = new Schema({
 }, schemaOptions)
 
 
-module.exports= mongoose.Model('Board', boardSchema)
+module.exports= mongoose.model('Board', boardSchema)
