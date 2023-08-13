@@ -11,12 +11,12 @@ const register = async(req, res)=>{
         )
 
         const user = await User.create(req.body)
-        const tokan = JWT.sign(
+        const token = JWT.sign(
             {id:user._id},
             process.env.TOKAN_SECRATE_KEY,
             {expiresIn: '24h'}
         )
-        res.status(201).json({user,tokan})
+        res.status(201).json({user,token})
 
     }
     catch (err){
@@ -56,14 +56,14 @@ const login= async(req,res)=>{
 
         user.password= undefined 
 
-        const tokan = JWT.sign(
+        const token = JWT.sign(
             {id:user._id},
             process.env.TOKAN_SECRATE_KEY,
             {expiresIn: '24h'}
         )
 
 
-        res.status(200).json({user, tokan})
+        res.status(200).json({user, token})
     }
     catch(err){
         res.status(500).json(err)

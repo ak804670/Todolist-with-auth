@@ -20,7 +20,7 @@ connection();
 app.get("/",(req,res)=>{
     res.send("made with ❤️ from Anish")
 })
-// app.use("/api", allRoutes);
+app.use("/api", allRoutes);
 
 app.listen(port,()=>{
     console.log(`server is up on :${port}`)

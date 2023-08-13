@@ -34,7 +34,7 @@ router.post(
 )
 
 router.post(
-    'verify-token',
+    '/verify-token',
     tokanHandler.verifyTokan,
     (req,res)=>{
         res.status(200).json({user : req.user})

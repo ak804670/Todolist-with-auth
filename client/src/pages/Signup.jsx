@@ -1,24 +1,24 @@
 import React, { useState } from 'react'
-import {Box, TextField, Card, CardContent, Button} from '@mui/material'
+import {Box, TextField, Button} from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {Link, useNavigate} from 'react-router-dom'
-
+import authApi from '../api/authApi'
 
 
 
 const Signup = () => {
 
-  const navigate= useNavigate
+  const navigate= useNavigate()
   const [loading, setLoading] = useState(false)
-  const [userNameErrText,setuserNameErrText]= useState()
-  const [passwordErrText,setPassword]= useState()
-  const [confirmPasswordErrText,setConfirmPasswordErrText]= useState()
+  const [userNameErrText,setuserNameErrText]= useState('')
+  const [passwordErrText,setPasswordErrText]= useState('')
+  const [confirmPasswordErrText,setConfirmPasswordErrText]= useState('')
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>{
 
       e.preventDefault()
       setuserNameErrText('')
-      setPassword('')
+      setPasswordErrText('')
       setConfirmPasswordErrText('')
 
       const data= new FormData(e.target)
@@ -36,7 +36,7 @@ const Signup = () => {
 
       if(password===''){
         err= true
-        setPassword("Please fill the password")
+        setPasswordErrText("Please fill the password")
       }
 
       if(confirmPassword===''){
@@ -50,6 +50,33 @@ const Signup = () => {
       }
 
       if(err) return
+
+      setLoading(true)
+
+      try{
+        const res= await authApi.signup({
+          username,password, confirmPassword
+        })
+        setLoading(false)
+        localStorage.setItem('token', res.token)
+        navigate('/')}
+        catch (err) {
+      const errors = err.data.errors
+      errors.forEach(e => {
+        if (e.param === 'username') {
+          setuserNameErrText(e.msg)
+        }
+        if (e.param === 'password') {
+          setPasswordErrText(e.msg)
+        }
+        if (e.param === 'confirmPassword') {
+          setConfirmPasswordErrText(e.msg)
+        }
+      })
+         setLoading(false)
+      }
+
+
     }
   return (
   
@@ -65,13 +92,12 @@ const Signup = () => {
         margin='normal'
         required
         fullWidth
-        // id='username'
+        id='username'
         variant="outlined"
-        id="outlined-basic"
         label="UserName"
         name='username'
         disabled={loading}
-        error={userNameErrText != ''}
+        error={userNameErrText !== ''}
         helperText={userNameErrText}
         />
 
@@ -83,7 +109,7 @@ const Signup = () => {
         name='password'
         type='password'
         label="Password"
-        error={passwordErrText != ''}
+        error={passwordErrText !== ''}
         helperText={passwordErrText}/>
 
          <TextField
@@ -94,7 +120,7 @@ const Signup = () => {
         name ='confirmPassword'
         type='password'
         label="Confirm Password"
-        error={confirmPasswordErrText != ''}
+        error={confirmPasswordErrText !== ''}
         helperText={confirmPasswordErrText}/>
 
         <LoadingButton
@@ -105,7 +131,7 @@ const Signup = () => {
         loading={loading}
         variant="outlined"
         >
-          Login
+          Signup
         </LoadingButton>
 
         <Button
