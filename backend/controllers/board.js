@@ -62,5 +62,46 @@ const getOne= async (req,res)=>{
     }
 }
 
+const update= async(req,res)=>{
 
-module.exports={create,getAll, updatePosition,getOne }
+    const {boardId}=req.params
+    const {title, description, favourite}=req.body
+
+    try{
+
+        if(title==="") req.body.title = 'untitled'
+        if(description==="") req.body.description = 'Add description'
+        const currentBoard = await Board.filedById(boardId)
+        if(!currentBoard) return res.status(404).json('Board not Found') 
+        if(favourite !== undefined && currentBoard.favourite !== favourite)  {
+            const favourites = await Borad.find({
+                user: currentBoard.user,
+                favourite: true,
+                _id: { $ne: boardId}
+            })
+            if(favourite){
+                req.body.favouritePosition= favourites.length >0 ? favourites.length : 0
+            }else{
+                for (const key in favourites) {
+                  const element = favourites[key]
+                  await board.findByIdAndUpdate(
+                    element.id,
+                    {$set:{ favouritePosition:key}}
+                  )
+                }
+            }
+        } 
+        
+
+        const board = await Board.findByIdAndUpdate(
+            boardId,
+            {$set: req.body}
+        )
+        res.status(200).json(Borad)
+    }catch(err){
+        res.status(500).json(err)
+    }
+}
+
+
+module.exports={create,getAll, updatePosition,getOne, update }

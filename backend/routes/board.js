@@ -32,4 +32,17 @@ router.get(
     tokanHandler.verifyTokan,
     boardController.getOne
 )
+
+router.put(
+    '/:boardId',
+    param('boardId').custom(value=>{
+        if(!validation.isObjectId(value)){
+            return Promise.reject('invalid Id')
+        }else return Promise.resolve()
+    }),
+    tokanHandler.verifyTokan,
+    boardController.update
+)
+
+
 module.exports = router
