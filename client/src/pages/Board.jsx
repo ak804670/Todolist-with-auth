@@ -66,6 +66,7 @@ const Board = () => {
     temp[index]={...temp[index], title: newTitle}
     dispatch(setBoards(temp))
     timer = setTimeout(async()=>{
+      
       try{
         await boardApi.update(boardId, {title: newTitle})
       }catch(err){
